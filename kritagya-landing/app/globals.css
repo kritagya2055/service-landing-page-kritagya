@@ -1,26 +1,110 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #080808;
+  --foreground: #ffffff;
+  --silver: #c0c0c0;
+  --card: #111111;
+  --border-soft: #222222;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-silver: var(--silver);
+  --color-card: var(--card);
+  --color-border-soft: var(--border-soft);
+  --font-sans: var(--font-inter);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-inter), system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.silver-gradient-text {
+  background: linear-gradient(180deg, #ffffff 0%, #c0c0c0 50%, #8a8a8a 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.silver-gradient-bg {
+  background: linear-gradient(
+    135deg,
+    #f4f4f4 0%,
+    #c0c0c0 35%,
+    #e8e8e8 65%,
+    #a0a0a0 100%
+  );
+}
+
+.silver-glow {
+  box-shadow: 0 0 24px rgba(192, 192, 192, 0.35),
+    0 0 48px rgba(192, 192, 192, 0.15);
+}
+
+.silver-glow-strong {
+  box-shadow: 0 0 32px rgba(192, 192, 192, 0.6),
+    0 0 64px rgba(192, 192, 192, 0.25);
+}
+
+.card-hover {
+  transition: box-shadow 0.3s ease, border-color 0.3s ease, transform 0.3s ease;
+}
+
+.card-hover:hover {
+  border-color: rgba(192, 192, 192, 0.6);
+  box-shadow: 0 0 24px rgba(192, 192, 192, 0.25),
+    0 0 48px rgba(192, 192, 192, 0.1);
+  transform: translateY(-2px);
+}
+
+@keyframes float-y {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-12px);
+  }
+}
+
+.animate-float {
+  animation: float-y 4s ease-in-out infinite;
+}
+
+@keyframes bounce-down {
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  50% {
+    transform: translateY(10px);
+    opacity: 0.5;
+  }
+}
+
+.animate-bounce-down {
+  animation: bounce-down 2s ease-in-out infinite;
+}
+
+input,
+select,
+textarea {
+  color-scheme: dark;
+}
+
+select option {
+  background-color: #111111;
+  color: #ffffff;
 }
