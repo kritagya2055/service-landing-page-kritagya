@@ -81,29 +81,34 @@ function scrollToForm() {
   if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
-// Each badge sits at a fixed anchor on its side and orbits around it.
-// `delay` shifts the badge's position along the orbit so the four badges
-// on each side never collide.
+// Anchor points + orbit start delays. Top values place badges evenly
+// from top to bottom on each side; tooltipPlacement decides whether the
+// hover card appears above or below to keep it on-screen.
 type OrbitConfig = {
   side: "left" | "right";
-  anchor: React.CSSProperties; // position of orbit center on screen
-  delay: number; // negative seconds — start partway through the orbit
+  anchor: React.CSSProperties;
+  delay: number;
+  tooltipPlacement: "above" | "below";
 };
 
 const ORBIT_DURATION_S = 28;
 
 const LEFT_ORBITS: OrbitConfig[] = [
-  { side: "left", anchor: { top: "18%", left: "9%" }, delay: 0 },
-  { side: "left", anchor: { top: "40%", left: "11%" }, delay: -7 },
-  { side: "left", anchor: { top: "60%", left: "11%" }, delay: -14 },
-  { side: "left", anchor: { top: "80%", left: "9%" }, delay: -21 },
+  // Top-left — tooltip below so it doesn't clip top of viewport.
+  { side: "left", anchor: { top: "16%", left: "11%" }, delay: 0, tooltipPlacement: "below" },
+  // Middle-left
+  { side: "left", anchor: { top: "40%", left: "11%" }, delay: -7, tooltipPlacement: "above" },
+  // Lower-left
+  { side: "left", anchor: { top: "63%", left: "11%" }, delay: -14, tooltipPlacement: "above" },
+  // Bottom-left
+  { side: "left", anchor: { top: "86%", left: "11%" }, delay: -21, tooltipPlacement: "above" },
 ];
 
 const RIGHT_ORBITS: OrbitConfig[] = [
-  { side: "right", anchor: { top: "18%", right: "9%" }, delay: -3 },
-  { side: "right", anchor: { top: "40%", right: "11%" }, delay: -10 },
-  { side: "right", anchor: { top: "60%", right: "11%" }, delay: -17 },
-  { side: "right", anchor: { top: "80%", right: "9%" }, delay: -24 },
+  { side: "right", anchor: { top: "16%", right: "11%" }, delay: -3, tooltipPlacement: "below" },
+  { side: "right", anchor: { top: "40%", right: "11%" }, delay: -10, tooltipPlacement: "above" },
+  { side: "right", anchor: { top: "63%", right: "11%" }, delay: -17, tooltipPlacement: "above" },
+  { side: "right", anchor: { top: "86%", right: "11%" }, delay: -24, tooltipPlacement: "above" },
 ];
 
 function OrbitingBadge({
@@ -115,9 +120,15 @@ function OrbitingBadge({
   orbit: OrbitConfig;
   index: number;
 }) {
-  // Tooltip aligns toward screen center so it never clips the viewport edge.
+  // Align tooltip's horizontal edge to the screen-inward side so a
+  // 240px tooltip on a badge near the viewport edge never clips off.
   const tooltipAlignClass =
     orbit.side === "left" ? "left-0" : "right-0";
+
+  const tooltipVerticalClass =
+    orbit.tooltipPlacement === "above"
+      ? "bottom-full mb-3"
+      : "top-full mt-3";
 
   return (
     <motion.div
@@ -135,16 +146,36 @@ function OrbitingBadge({
       >
         <BadgeCard service={service} />
 
-        {/* Tooltip */}
+        {/* Tooltip — solid dark card with arrow */}
         <div
           role="tooltip"
-          className={`pointer-events-none absolute bottom-full mb-3 w-64 rounded-xl border border-white/25 bg-black/75 p-4 text-left opacity-0 backdrop-blur-md transition-opacity duration-300 group-hover:opacity-100 ${tooltipAlignClass}`}
-          style={{ boxShadow: "0 0 28px rgba(192,192,192,0.3)" }}
+          className={`pointer-events-none absolute w-60 rounded-lg border border-[#888888] bg-[#0a0a0a] px-4 py-3 text-left opacity-0 transition-opacity duration-200 group-hover:opacity-100 ${tooltipVerticalClass} ${tooltipAlignClass}`}
+          style={{
+            boxShadow: "0 4px 20px rgba(0, 0, 0, 0.8)",
+            zIndex: 9999,
+          }}
         >
           <p className="text-sm font-bold text-white">{service.name}</p>
-          <p className="mt-1 text-xs text-silver leading-relaxed">
+          <p className="mt-1 text-xs text-zinc-300 leading-relaxed">
             {service.description}
           </p>
+
+          {/* Arrow — pure CSS triangle pointing toward the badge */}
+          <span
+            aria-hidden
+            className="absolute"
+            style={{
+              width: 0,
+              height: 0,
+              borderLeft: "6px solid transparent",
+              borderRight: "6px solid transparent",
+              [orbit.tooltipPlacement === "above" ? "bottom" : "top"]: "-6px",
+              [orbit.side === "left" ? "left" : "right"]: "20px",
+              ...(orbit.tooltipPlacement === "above"
+                ? { borderTop: "6px solid #0a0a0a" }
+                : { borderBottom: "6px solid #0a0a0a" }),
+            }}
+          />
         </div>
       </div>
     </motion.div>
@@ -155,12 +186,12 @@ function BadgeCard({ service }: { service: Service }) {
   const { Icon } = service;
   return (
     <div
-      className="flex w-[160px] cursor-default flex-col items-center gap-2 rounded-2xl border border-white/20 bg-black/50 px-4 py-3 text-center backdrop-blur-md transition-all duration-300 hover:border-white/50 hover:shadow-[0_0_28px_rgba(192,192,192,0.45),0_0_56px_rgba(192,192,192,0.18)]"
-      style={{ boxShadow: "0 0 14px rgba(192,192,192,0.18)" }}
+      className="flex w-[140px] cursor-default flex-col items-center gap-1.5 rounded-2xl border border-white/20 bg-black/50 px-3 py-2.5 text-center backdrop-blur-md transition-all duration-300 hover:border-white/50 hover:shadow-[0_0_24px_rgba(192,192,192,0.45),0_0_48px_rgba(192,192,192,0.18)]"
+      style={{ boxShadow: "0 0 12px rgba(192,192,192,0.15)" }}
     >
-      <Icon size={22} className="text-silver" />
-      <div className="h-px w-8 bg-gradient-to-r from-transparent via-silver to-transparent" />
-      <p className="text-xs font-bold text-white leading-tight">
+      <Icon size={20} className="text-silver" />
+      <div className="h-px w-7 bg-gradient-to-r from-transparent via-silver to-transparent" />
+      <p className="text-[12px] font-bold leading-tight text-white">
         {service.name}
       </p>
     </div>
@@ -168,16 +199,15 @@ function BadgeCard({ service }: { service: Service }) {
 }
 
 function StaticBadgeCard({ service }: { service: Service }) {
-  // Mobile grid version — no orbit/tooltip; shows description inline.
   const { Icon } = service;
   return (
     <div
-      className="flex flex-col items-center gap-2 rounded-2xl border border-white/20 bg-black/50 px-3 py-4 text-center backdrop-blur-md"
-      style={{ boxShadow: "0 0 14px rgba(192,192,192,0.15)" }}
+      className="flex flex-col items-center gap-1.5 rounded-2xl border border-white/20 bg-black/50 px-3 py-4 text-center backdrop-blur-md"
+      style={{ boxShadow: "0 0 12px rgba(192,192,192,0.15)" }}
     >
-      <Icon size={22} className="text-silver" />
-      <div className="h-px w-8 bg-gradient-to-r from-transparent via-silver to-transparent" />
-      <p className="text-[11px] font-bold text-white leading-tight">
+      <Icon size={20} className="text-silver" />
+      <div className="h-px w-7 bg-gradient-to-r from-transparent via-silver to-transparent" />
+      <p className="text-[12px] font-bold leading-tight text-white">
         {service.name}
       </p>
     </div>
@@ -187,7 +217,6 @@ function StaticBadgeCard({ service }: { service: Service }) {
 export default function Hero() {
   return (
     <section className="relative w-full min-h-screen overflow-hidden flex flex-col items-center justify-center text-center px-6">
-      {/* Background video */}
       <video
         className="absolute inset-0 h-full w-full object-cover"
         src="/kritagya_video_animation.mp4"
@@ -199,7 +228,7 @@ export default function Hero() {
       <div className="absolute inset-0 bg-black/70" />
       <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/60 to-black" />
 
-      {/* Orbital badges — desktop only */}
+      {/* Orbital badges — lg+ only */}
       <div className="absolute inset-0 hidden lg:block z-10 pointer-events-none">
         {LEFT_SERVICES.map((service, i) => (
           <div key={service.name} className="pointer-events-auto">
@@ -217,7 +246,6 @@ export default function Hero() {
         ))}
       </div>
 
-      {/* Content */}
       <div className="relative z-20 flex flex-col items-center max-w-4xl">
         <motion.div
           initial={{ opacity: 0 }}
@@ -276,7 +304,6 @@ export default function Hero() {
           Book Your FREE Call Now
         </motion.button>
 
-        {/* Mobile badges grid — shown below the CTA */}
         <div className="mt-10 grid grid-cols-2 gap-3 w-full max-w-md lg:hidden">
           {ALL_SERVICES.map((service) => (
             <StaticBadgeCard key={service.name} service={service} />
@@ -284,7 +311,6 @@ export default function Hero() {
         </div>
       </div>
 
-      {/* Bouncing down arrow */}
       <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 animate-bounce-down hidden lg:block">
         <svg
           width="28"

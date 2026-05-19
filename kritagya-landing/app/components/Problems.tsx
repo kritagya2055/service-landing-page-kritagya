@@ -34,23 +34,38 @@ function XIcon() {
 
 export default function Problems() {
   return (
-    <section className="relative z-10 w-full bg-background py-24 px-6">
-      <div className="mx-auto max-w-6xl">
+    <section className="relative z-10 w-full bg-background py-28 px-6">
+      <div className="mx-auto max-w-3xl">
         <SectionHeading>Does This Sound Like You?</SectionHeading>
-        <div className="mt-14 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-          {PAIN_POINTS.map((point, i) => (
-            <motion.div
-              key={point}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.3 }}
-              transition={{ duration: 0.5, delay: i * 0.08 }}
-              className="flex items-start gap-4 rounded-xl border border-border-soft bg-card p-6 card-hover"
-            >
-              <XIcon />
-              <p className="text-zinc-200 text-base leading-relaxed">{point}</p>
-            </motion.div>
-          ))}
+
+        <div className="relative mt-16 pl-8 sm:pl-12">
+          {/* Vertical silver line connecting items */}
+          <div
+            aria-hidden
+            className="absolute left-0 top-2 bottom-2 w-px bg-gradient-to-b from-silver/10 via-silver/40 to-silver/10"
+          />
+
+          <ul className="flex flex-col">
+            {PAIN_POINTS.map((point, i) => (
+              <motion.li
+                key={point}
+                initial={{ opacity: 0, x: -40 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true, amount: 0.4 }}
+                transition={{ duration: 0.6, delay: i * 0.08, ease: "easeOut" }}
+                className={`flex items-center gap-5 sm:gap-6 py-6 sm:py-7 ${
+                  i < PAIN_POINTS.length - 1
+                    ? "border-b border-silver/15"
+                    : ""
+                }`}
+              >
+                <XIcon />
+                <p className="text-lg sm:text-xl md:text-2xl font-semibold text-white tracking-tight leading-snug">
+                  {point}
+                </p>
+              </motion.li>
+            ))}
+          </ul>
         </div>
       </div>
     </section>

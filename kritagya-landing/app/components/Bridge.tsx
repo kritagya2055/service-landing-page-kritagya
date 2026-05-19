@@ -8,9 +8,12 @@ const PARAGRAPH =
   "I have helped Nepal businesses generate consistent leads and sales through smart digital marketing. In this free call, I will personally diagnose your business and hand you a clear roadmap to grow — completely FREE.";
 
 export default function Bridge() {
-  // Reveal each character on its own, then animate the accent line + paragraph.
-  const chars = Array.from(HEADLINE);
-  const typingDuration = chars.length * 0.04 + 0.2; // total seconds before accent
+  // Split by word so words never break mid-character. Animate each char inside.
+  const words = HEADLINE.split(" ");
+
+  // Approximate typing duration so the line + paragraph come in after.
+  const totalChars = HEADLINE.length;
+  const typingDuration = totalChars * 0.04 + 0.2;
 
   return (
     <section className="relative z-10 w-full bg-background py-28 px-6">
@@ -20,24 +23,30 @@ export default function Bridge() {
           whileInView="visible"
           viewport={{ once: true, amount: 0.5 }}
           aria-label={HEADLINE}
-          className="inline-flex flex-wrap justify-center text-3xl sm:text-4xl md:text-5xl font-bold text-white tracking-tight"
+          className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white tracking-tight leading-tight"
           variants={{
             hidden: {},
             visible: { transition: { staggerChildren: 0.04 } },
           }}
         >
-          {chars.map((c, i) => (
-            <motion.span
-              key={i}
-              variants={{
-                hidden: { opacity: 0 },
-                visible: { opacity: 1 },
-              }}
-              className={c === " " ? "inline-block w-[0.3em]" : undefined}
-              aria-hidden
+          {words.map((word, wi) => (
+            <span
+              key={`${word}-${wi}`}
+              className="inline-block whitespace-nowrap mr-[0.25em] last:mr-0"
             >
-              {c}
-            </motion.span>
+              {Array.from(word).map((c, ci) => (
+                <motion.span
+                  key={ci}
+                  variants={{
+                    hidden: { opacity: 0 },
+                    visible: { opacity: 1 },
+                  }}
+                  aria-hidden
+                >
+                  {c}
+                </motion.span>
+              ))}
+            </span>
           ))}
           <span className="typing-caret" aria-hidden />
         </motion.h2>

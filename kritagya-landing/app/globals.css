@@ -86,19 +86,19 @@ body {
    Radius is large enough to feel like motion, small enough to stay on-side. */
 @keyframes orbit-left {
   from {
-    transform: rotate(0deg) translateX(38px) rotate(0deg);
+    transform: rotate(0deg) translateX(32px) rotate(0deg);
   }
   to {
-    transform: rotate(360deg) translateX(38px) rotate(-360deg);
+    transform: rotate(360deg) translateX(32px) rotate(-360deg);
   }
 }
 
 @keyframes orbit-right {
   from {
-    transform: rotate(0deg) translateX(-38px) rotate(0deg);
+    transform: rotate(0deg) translateX(-32px) rotate(0deg);
   }
   to {
-    transform: rotate(-360deg) translateX(-38px) rotate(360deg);
+    transform: rotate(-360deg) translateX(-32px) rotate(360deg);
   }
 }
 
