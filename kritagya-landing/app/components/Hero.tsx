@@ -2,73 +2,78 @@
 
 import Image from "next/image";
 import { motion } from "framer-motion";
+import {
+  ContentIcon,
+  EmailIcon,
+  GoogleAdsIcon,
+  LandingPageIcon,
+  MetaAdsIcon,
+  SeoIcon,
+  SocialMediaIcon,
+  WebsiteIcon,
+} from "./ServiceIcons";
 
 type Service = {
   name: string;
   description: string;
+  Icon: React.FC<{ size?: number; className?: string }>;
 };
 
-const SERVICES: Service[] = [
+const LEFT_SERVICES: Service[] = [
   {
     name: "Social Media Marketing",
     description: "Grow your brand on Facebook, Instagram and TikTok",
-  },
-  {
-    name: "Google Ads",
-    description: "Get instant traffic with targeted Google campaigns",
+    Icon: SocialMediaIcon,
   },
   {
     name: "SEO",
     description: "Rank higher on Google and get free organic traffic",
-  },
-  {
-    name: "Landing Page Design",
-    description: "Convert visitors into leads with high converting pages",
+    Icon: SeoIcon,
   },
   {
     name: "Meta Ads",
     description: "Run profitable Facebook and Instagram ad campaigns",
+    Icon: MetaAdsIcon,
+  },
+  {
+    name: "Content Creation",
+    description: "Create engaging content that attracts your ideal clients",
+    Icon: ContentIcon,
+  },
+];
+
+const RIGHT_SERVICES: Service[] = [
+  {
+    name: "Google Ads",
+    description: "Get instant traffic with targeted Google campaigns",
+    Icon: GoogleAdsIcon,
+  },
+  {
+    name: "Landing Page Design",
+    description: "Convert visitors into leads with high converting pages",
+    Icon: LandingPageIcon,
   },
   {
     name: "Website Design",
     description: "Build a professional website that works for your business",
-  },
-  {
-    name: "Content Creation",
-    description: "Create engaging content that attracts ideal clients",
+    Icon: WebsiteIcon,
   },
   {
     name: "Email Marketing",
     description: "Build and nurture your email list automatically",
+    Icon: EmailIcon,
   },
 ];
 
-// Quadrant layout — 2 top-left, 2 top-right, 2 bottom-left, 2 bottom-right.
-// Kept off the horizontal centerline so badges never cover the headline.
-type BadgeLayout = {
-  position: React.CSSProperties;
-  duration: number; // float speed in seconds
-  delay: number; // animation delay
-  tooltipSide: "right" | "left" | "bottom";
-};
-
-const BADGE_LAYOUT: BadgeLayout[] = [
-  // Social Media Marketing — top left (upper)
-  { position: { top: "12%", left: "4%" }, duration: 5.5, delay: 0, tooltipSide: "right" },
-  // Google Ads — top right (upper)
-  { position: { top: "10%", right: "5%" }, duration: 6.2, delay: 0.8, tooltipSide: "left" },
-  // SEO — top left (lower)
-  { position: { top: "30%", left: "7%" }, duration: 4.8, delay: 1.4, tooltipSide: "right" },
-  // Landing Page Design — top right (lower)
-  { position: { top: "28%", right: "8%" }, duration: 5.9, delay: 0.4, tooltipSide: "left" },
-  // Meta Ads — bottom left (upper)
-  { position: { bottom: "28%", left: "5%" }, duration: 6.5, delay: 1.2, tooltipSide: "right" },
-  // Website Design — bottom right (upper)
-  { position: { bottom: "30%", right: "6%" }, duration: 5.2, delay: 0.2, tooltipSide: "left" },
-  // Content Creation — bottom left (lower)
-  { position: { bottom: "12%", left: "8%" }, duration: 4.6, delay: 1.6, tooltipSide: "right" },
-  // Email Marketing — bottom right (lower)
-  { position: { bottom: "10%", right: "7%" }, duration: 5.8, delay: 1.0, tooltipSide: "left" },
+const ALL_SERVICES: Service[] = [
+  LEFT_SERVICES[0],
+  RIGHT_SERVICES[0],
+  LEFT_SERVICES[1],
+  RIGHT_SERVICES[1],
+  LEFT_SERVICES[2],
+  RIGHT_SERVICES[2],
+  LEFT_SERVICES[3],
+  RIGHT_SERVICES[3],
 ];
 
 function scrollToForm() {
@@ -76,49 +81,106 @@ function scrollToForm() {
   if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
-function Badge({
+// Each badge sits at a fixed anchor on its side and orbits around it.
+// `delay` shifts the badge's position along the orbit so the four badges
+// on each side never collide.
+type OrbitConfig = {
+  side: "left" | "right";
+  anchor: React.CSSProperties; // position of orbit center on screen
+  delay: number; // negative seconds — start partway through the orbit
+};
+
+const ORBIT_DURATION_S = 28;
+
+const LEFT_ORBITS: OrbitConfig[] = [
+  { side: "left", anchor: { top: "18%", left: "9%" }, delay: 0 },
+  { side: "left", anchor: { top: "40%", left: "11%" }, delay: -7 },
+  { side: "left", anchor: { top: "60%", left: "11%" }, delay: -14 },
+  { side: "left", anchor: { top: "80%", left: "9%" }, delay: -21 },
+];
+
+const RIGHT_ORBITS: OrbitConfig[] = [
+  { side: "right", anchor: { top: "18%", right: "9%" }, delay: -3 },
+  { side: "right", anchor: { top: "40%", right: "11%" }, delay: -10 },
+  { side: "right", anchor: { top: "60%", right: "11%" }, delay: -17 },
+  { side: "right", anchor: { top: "80%", right: "9%" }, delay: -24 },
+];
+
+function OrbitingBadge({
   service,
-  layout,
+  orbit,
   index,
 }: {
   service: Service;
-  layout?: BadgeLayout;
+  orbit: OrbitConfig;
   index: number;
 }) {
-  const tooltipPositionClass =
-    layout?.tooltipSide === "right"
-      ? "left-full ml-3 top-1/2 -translate-y-1/2"
-      : layout?.tooltipSide === "left"
-      ? "right-full mr-3 top-1/2 -translate-y-1/2"
-      : "top-full mt-3 left-1/2 -translate-x-1/2";
+  // Tooltip aligns toward screen center so it never clips the viewport edge.
+  const tooltipAlignClass =
+    orbit.side === "left" ? "left-0" : "right-0";
 
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.85 }}
       animate={{ opacity: 1, scale: 1 }}
-      transition={{ delay: 1.2 + index * 0.08, duration: 0.5 }}
-      className="group relative"
-      style={{
-        animation: layout
-          ? `badge-float ${layout.duration}s ease-in-out ${layout.delay}s infinite, badge-pulse ${
-              layout.duration * 1.4
-            }s ease-in-out ${layout.delay}s infinite`
-          : undefined,
-      }}
+      transition={{ delay: 1.0 + index * 0.08, duration: 0.6 }}
+      className="absolute"
+      style={orbit.anchor}
     >
-      <div className="cursor-default rounded-full border border-white/20 bg-black/40 px-4 py-2 text-xs lg:text-sm font-medium text-white backdrop-blur-md transition-shadow duration-300 group-hover:border-white/40 group-hover:shadow-[0_0_24px_rgba(192,192,192,0.45),0_0_48px_rgba(192,192,192,0.2)]">
-        {service.name}
-      </div>
-
-      {/* Tooltip */}
       <div
-        role="tooltip"
-        className={`pointer-events-none absolute z-30 w-56 rounded-lg border border-white/25 bg-black/70 px-3 py-2 text-xs text-white opacity-0 backdrop-blur-md transition-opacity duration-200 group-hover:opacity-100 ${tooltipPositionClass}`}
-        style={{ boxShadow: "0 0 20px rgba(192,192,192,0.25)" }}
+        className="orbit-host group relative"
+        style={{
+          animation: `orbit-${orbit.side} ${ORBIT_DURATION_S}s linear ${orbit.delay}s infinite`,
+        }}
       >
-        {service.description}
+        <BadgeCard service={service} />
+
+        {/* Tooltip */}
+        <div
+          role="tooltip"
+          className={`pointer-events-none absolute bottom-full mb-3 w-64 rounded-xl border border-white/25 bg-black/75 p-4 text-left opacity-0 backdrop-blur-md transition-opacity duration-300 group-hover:opacity-100 ${tooltipAlignClass}`}
+          style={{ boxShadow: "0 0 28px rgba(192,192,192,0.3)" }}
+        >
+          <p className="text-sm font-bold text-white">{service.name}</p>
+          <p className="mt-1 text-xs text-silver leading-relaxed">
+            {service.description}
+          </p>
+        </div>
       </div>
     </motion.div>
+  );
+}
+
+function BadgeCard({ service }: { service: Service }) {
+  const { Icon } = service;
+  return (
+    <div
+      className="flex w-[160px] cursor-default flex-col items-center gap-2 rounded-2xl border border-white/20 bg-black/50 px-4 py-3 text-center backdrop-blur-md transition-all duration-300 hover:border-white/50 hover:shadow-[0_0_28px_rgba(192,192,192,0.45),0_0_56px_rgba(192,192,192,0.18)]"
+      style={{ boxShadow: "0 0 14px rgba(192,192,192,0.18)" }}
+    >
+      <Icon size={22} className="text-silver" />
+      <div className="h-px w-8 bg-gradient-to-r from-transparent via-silver to-transparent" />
+      <p className="text-xs font-bold text-white leading-tight">
+        {service.name}
+      </p>
+    </div>
+  );
+}
+
+function StaticBadgeCard({ service }: { service: Service }) {
+  // Mobile grid version — no orbit/tooltip; shows description inline.
+  const { Icon } = service;
+  return (
+    <div
+      className="flex flex-col items-center gap-2 rounded-2xl border border-white/20 bg-black/50 px-3 py-4 text-center backdrop-blur-md"
+      style={{ boxShadow: "0 0 14px rgba(192,192,192,0.15)" }}
+    >
+      <Icon size={22} className="text-silver" />
+      <div className="h-px w-8 bg-gradient-to-r from-transparent via-silver to-transparent" />
+      <p className="text-[11px] font-bold text-white leading-tight">
+        {service.name}
+      </p>
+    </div>
   );
 }
 
@@ -134,15 +196,23 @@ export default function Hero() {
         loop
         playsInline
       />
-      {/* Dark overlay */}
       <div className="absolute inset-0 bg-black/70" />
       <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/60 to-black" />
 
-      {/* Floating glassmorphism badges — desktop only */}
-      <div className="absolute inset-0 hidden md:block z-10">
-        {SERVICES.map((service, i) => (
-          <div key={service.name} className="absolute" style={BADGE_LAYOUT[i].position}>
-            <Badge service={service} layout={BADGE_LAYOUT[i]} index={i} />
+      {/* Orbital badges — desktop only */}
+      <div className="absolute inset-0 hidden lg:block z-10 pointer-events-none">
+        {LEFT_SERVICES.map((service, i) => (
+          <div key={service.name} className="pointer-events-auto">
+            <OrbitingBadge service={service} orbit={LEFT_ORBITS[i]} index={i} />
+          </div>
+        ))}
+        {RIGHT_SERVICES.map((service, i) => (
+          <div key={service.name} className="pointer-events-auto">
+            <OrbitingBadge
+              service={service}
+              orbit={RIGHT_ORBITS[i]}
+              index={i + 4}
+            />
           </div>
         ))}
       </div>
@@ -196,13 +266,6 @@ export default function Hero() {
           you can implement it the same day.
         </motion.p>
 
-        {/* Mobile badge grid — 2 cols × 4 rows */}
-        <div className="mt-8 grid grid-cols-2 gap-3 w-full max-w-md md:hidden">
-          {SERVICES.map((service, i) => (
-            <Badge key={service.name} service={service} index={i} />
-          ))}
-        </div>
-
         <motion.button
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -212,10 +275,17 @@ export default function Hero() {
         >
           Book Your FREE Call Now
         </motion.button>
+
+        {/* Mobile badges grid — shown below the CTA */}
+        <div className="mt-10 grid grid-cols-2 gap-3 w-full max-w-md lg:hidden">
+          {ALL_SERVICES.map((service) => (
+            <StaticBadgeCard key={service.name} service={service} />
+          ))}
+        </div>
       </div>
 
       {/* Bouncing down arrow */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 animate-bounce-down">
+      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 animate-bounce-down hidden lg:block">
         <svg
           width="28"
           height="28"

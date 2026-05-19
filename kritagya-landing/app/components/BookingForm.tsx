@@ -71,11 +71,20 @@ export default function BookingForm() {
               autoComplete="name"
             />
             <Field
-              id="phone"
-              label="Phone Number"
+              id="gmail"
+              label="Gmail Address"
+              type="email"
+              required
+              autoComplete="email"
+              placeholder="Enter your Gmail address"
+            />
+            <Field
+              id="whatsapp"
+              label="WhatsApp Number"
               type="tel"
               required
               autoComplete="tel"
+              placeholder="Enter your WhatsApp number"
             />
             <Field
               id="businessName"
@@ -133,12 +142,14 @@ function Field({
   type,
   required,
   autoComplete,
+  placeholder,
 }: {
   id: string;
   label: string;
   type: string;
   required?: boolean;
   autoComplete?: string;
+  placeholder?: string;
 }) {
   return (
     <div className="flex flex-col gap-2">
@@ -151,6 +162,7 @@ function Field({
         type={type}
         required={required}
         autoComplete={autoComplete}
+        placeholder={placeholder}
         className="w-full rounded-lg border border-silver/40 bg-background px-4 py-3 text-white placeholder:text-zinc-500 outline-none transition focus:border-silver focus:ring-2 focus:ring-silver/30"
       />
     </div>

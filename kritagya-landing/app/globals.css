@@ -82,24 +82,47 @@ body {
   animation: float-y 4s ease-in-out infinite;
 }
 
-@keyframes badge-float {
-  0%,
-  100% {
-    transform: translateY(0);
+/* Orbit animations for hero service badges.
+   Radius is large enough to feel like motion, small enough to stay on-side. */
+@keyframes orbit-left {
+  from {
+    transform: rotate(0deg) translateX(38px) rotate(0deg);
   }
-  50% {
-    transform: translateY(-14px);
+  to {
+    transform: rotate(360deg) translateX(38px) rotate(-360deg);
   }
 }
 
-@keyframes badge-pulse {
+@keyframes orbit-right {
+  from {
+    transform: rotate(0deg) translateX(-38px) rotate(0deg);
+  }
+  to {
+    transform: rotate(-360deg) translateX(-38px) rotate(360deg);
+  }
+}
+
+.orbit-host:hover {
+  animation-play-state: paused !important;
+}
+
+@keyframes typing-caret {
   0%,
   100% {
-    box-shadow: 0 0 0 rgba(192, 192, 192, 0);
+    opacity: 0;
   }
   50% {
-    box-shadow: 0 0 18px rgba(192, 192, 192, 0.25);
+    opacity: 1;
   }
+}
+
+.typing-caret {
+  display: inline-block;
+  width: 2px;
+  background: var(--silver);
+  margin-left: 4px;
+  animation: typing-caret 0.9s steps(2) infinite;
+  align-self: stretch;
 }
 
 @keyframes bounce-down {
