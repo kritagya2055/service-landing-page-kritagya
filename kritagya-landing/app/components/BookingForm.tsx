@@ -1,33 +1,9 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-
-const BUSINESS_TYPES = [
-  "Restaurant",
-  "Retail",
-  "Education",
-  "Healthcare",
-  "Real Estate",
-  "E-commerce",
-  "Other",
-];
+import FlodeskForm from "./FlodeskForm";
 
 export default function BookingForm() {
-  const router = useRouter();
-  const [submitting, setSubmitting] = useState(false);
-
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    setSubmitting(true);
-    // TODO: Wire up form submission (e.g., to email service or CRM) here.
-    // For now we just navigate to the thank-you page.
-    setTimeout(() => {
-      router.push("/thanks");
-    }, 400);
-  }
-
   return (
     <section
       id="form"
@@ -53,118 +29,21 @@ export default function BookingForm() {
           Limited spots available — only 3 seats remaining this month!
         </motion.p>
 
-        <motion.form
+        <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.3 }}
           transition={{ duration: 0.7, delay: 0.3 }}
-          onSubmit={handleSubmit}
-          className="mx-auto mt-10 max-w-[600px] rounded-2xl border border-border-soft bg-card p-6 sm:p-8 text-left"
+          className="mx-auto mt-10 max-w-[640px] rounded-2xl border border-border-soft bg-card p-2 sm:p-4 text-left"
           style={{ boxShadow: "0 0 32px rgba(192,192,192,0.08)" }}
         >
-          <div className="flex flex-col gap-5">
-            <Field
-              id="fullName"
-              label="Full Name"
-              type="text"
-              required
-              autoComplete="name"
-            />
-            <Field
-              id="gmail"
-              label="Gmail Address"
-              type="email"
-              required
-              autoComplete="email"
-              placeholder="Enter your Gmail address"
-            />
-            <Field
-              id="whatsapp"
-              label="WhatsApp Number"
-              type="tel"
-              required
-              autoComplete="tel"
-              placeholder="Enter your WhatsApp number"
-            />
-            <Field
-              id="businessName"
-              label="Business Name"
-              type="text"
-              required
-              autoComplete="organization"
-            />
-            <div className="flex flex-col gap-2">
-              <label
-                htmlFor="businessType"
-                className="text-sm font-medium text-silver"
-              >
-                Business Type
-              </label>
-              <select
-                id="businessType"
-                name="businessType"
-                required
-                defaultValue=""
-                className="w-full rounded-lg border border-silver/40 bg-background px-4 py-3 text-white outline-none transition focus:border-silver focus:ring-2 focus:ring-silver/30"
-              >
-                <option value="" disabled>
-                  Select your business type
-                </option>
-                {BUSINESS_TYPES.map((t) => (
-                  <option key={t} value={t}>
-                    {t}
-                  </option>
-                ))}
-              </select>
-            </div>
+          <FlodeskForm />
+        </motion.div>
 
-            <button
-              type="submit"
-              disabled={submitting}
-              className="mt-2 w-full silver-gradient-bg silver-glow rounded-full px-8 py-4 text-base sm:text-lg font-bold text-black transition-transform hover:scale-[1.02] active:scale-[0.98] disabled:opacity-70"
-            >
-              {submitting ? "Booking..." : "Book My FREE Call Now"}
-            </button>
-
-            <p className="text-center text-xs text-zinc-400">
-              No credit card required. 100% FREE.
-            </p>
-          </div>
-        </motion.form>
+        <p className="mt-4 text-xs text-zinc-400">
+          No credit card required. 100% FREE.
+        </p>
       </div>
     </section>
-  );
-}
-
-function Field({
-  id,
-  label,
-  type,
-  required,
-  autoComplete,
-  placeholder,
-}: {
-  id: string;
-  label: string;
-  type: string;
-  required?: boolean;
-  autoComplete?: string;
-  placeholder?: string;
-}) {
-  return (
-    <div className="flex flex-col gap-2">
-      <label htmlFor={id} className="text-sm font-medium text-silver">
-        {label}
-      </label>
-      <input
-        id={id}
-        name={id}
-        type={type}
-        required={required}
-        autoComplete={autoComplete}
-        placeholder={placeholder}
-        className="w-full rounded-lg border border-silver/40 bg-background px-4 py-3 text-white placeholder:text-zinc-500 outline-none transition focus:border-silver focus:ring-2 focus:ring-silver/30"
-      />
-    </div>
   );
 }

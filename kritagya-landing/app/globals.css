@@ -151,3 +151,123 @@ select option {
   background-color: #111111;
   color: #ffffff;
 }
+
+/* -----------------------------------------------------------
+   Flodesk embed visual overrides.
+   We only style — never alter markup, action URL, field names,
+   hidden inputs, the config block, or any data-ff-* attribute.
+   ----------------------------------------------------------- */
+.flodesk-wrap [data-ff-el="root"].ff-6a0d775777d6ff7039a5dd24,
+.flodesk-wrap
+  [data-ff-el="root"].ff-6a0d775777d6ff7039a5dd24
+  .ff-6a0d775777d6ff7039a5dd24__container {
+  background: transparent !important;
+  color: #ffffff !important;
+}
+
+/* Hide Flodesk's built-in title and subtitle — the surrounding
+   section already provides the headline + subheading. */
+.flodesk-wrap [data-ff-el="root"].ff-6a0d775777d6ff7039a5dd24 .ff-6a0d775777d6ff7039a5dd24__title,
+.flodesk-wrap
+  [data-ff-el="root"].ff-6a0d775777d6ff7039a5dd24
+  .ff-6a0d775777d6ff7039a5dd24__subtitle {
+  display: none !important;
+}
+
+.flodesk-wrap
+  [data-ff-el="root"].ff-6a0d775777d6ff7039a5dd24
+  .ff-6a0d775777d6ff7039a5dd24__form {
+  background: transparent !important;
+  color: #ffffff !important;
+  padding: 24px 20px !important;
+  font-family: var(--font-inter), system-ui, sans-serif !important;
+}
+
+@media (max-width: 640px) {
+  .flodesk-wrap
+    [data-ff-el="root"].ff-6a0d775777d6ff7039a5dd24
+    .ff-6a0d775777d6ff7039a5dd24__form {
+    padding: 16px 12px !important;
+  }
+}
+
+/* Inputs */
+.flodesk-wrap
+  [data-ff-el="root"].ff-6a0d775777d6ff7039a5dd24
+  .ff-6a0d775777d6ff7039a5dd24__control {
+  background: #080808 !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(192, 192, 192, 0.4) !important;
+  border-radius: 10px !important;
+  height: 48px !important;
+  font-size: 14px !important;
+  font-family: inherit !important;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+.flodesk-wrap
+  [data-ff-el="root"].ff-6a0d775777d6ff7039a5dd24
+  .ff-6a0d775777d6ff7039a5dd24__control:focus {
+  border-color: #c0c0c0 !important;
+  box-shadow: 0 0 0 3px rgba(192, 192, 192, 0.2) !important;
+}
+
+/* Floating label */
+.flodesk-wrap
+  [data-ff-el="root"].ff-6a0d775777d6ff7039a5dd24
+  .ff-6a0d775777d6ff7039a5dd24__label {
+  color: rgba(192, 192, 192, 0.85) !important;
+  font-family: inherit !important;
+  font-size: 14px !important;
+}
+
+/* Submit button — silver gradient, black text, matches site CTA */
+.flodesk-wrap
+  [data-ff-el="root"].ff-6a0d775777d6ff7039a5dd24
+  .ff-6a0d775777d6ff7039a5dd24__button {
+  width: 100% !important;
+  border: none !important;
+  border-radius: 9999px !important;
+  padding: 14px 28px !important;
+  color: #000000 !important;
+  font-weight: 700 !important;
+  font-size: 15px !important;
+  font-family: inherit !important;
+  letter-spacing: 0.2px !important;
+  background: linear-gradient(
+    135deg,
+    #f4f4f4 0%,
+    #c0c0c0 35%,
+    #e8e8e8 65%,
+    #a0a0a0 100%
+  ) !important;
+  box-shadow: 0 0 24px rgba(192, 192, 192, 0.35),
+    0 0 48px rgba(192, 192, 192, 0.15) !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+.flodesk-wrap
+  [data-ff-el="root"].ff-6a0d775777d6ff7039a5dd24
+  .ff-6a0d775777d6ff7039a5dd24__button:hover {
+  transform: scale(1.02);
+  box-shadow: 0 0 32px rgba(192, 192, 192, 0.5),
+    0 0 64px rgba(192, 192, 192, 0.2) !important;
+}
+
+/* Success message — readable on dark */
+.flodesk-wrap
+  [data-ff-el="root"].ff-6a0d775777d6ff7039a5dd24
+  .ff-6a0d775777d6ff7039a5dd24__success-message {
+  color: #c0c0c0 !important;
+  font-family: inherit !important;
+  font-size: 16px !important;
+}
+
+/* Error messages */
+.flodesk-wrap
+  [data-ff-el="root"].ff-6a0d775777d6ff7039a5dd24
+  .fd-form-group.fd-has-error
+  .fd-form-feedback {
+  color: #ff7a73 !important;
+  font-family: inherit !important;
+}
