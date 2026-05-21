@@ -961,6 +961,16 @@ export const FLODESK_EMBED_HTML = String.raw`<link rel="preload" href="https://a
             </label>
           </div>
 
+
+          <div class="ff-6a0d775777d6ff7039a5dd24__field fd-form-group flodesk-message-field">
+            <textarea id="ff-6a0d775777d6ff7039a5dd24-message" class="ff-6a0d775777d6ff7039a5dd24__control fd-form-control" maxlength="2000" name="fields.message" placeholder="Briefly describe what you are struggling with in your business right now..." rows="5"></textarea>
+            <label for="ff-6a0d775777d6ff7039a5dd24-message" class="ff-6a0d775777d6ff7039a5dd24__label fd-form-label">
+              <div>
+                <div>Tell me about your business challenge</div>
+              </div>
+            </label>
+          </div>
+
           <input type="text" maxlength="255" name="confirm_email_address" style="display: none" />
           <!--tpl {% endblock %} tpl-->
         </div>
@@ -968,7 +978,7 @@ export const FLODESK_EMBED_HTML = String.raw`<link rel="preload" href="https://a
 
         <div class="ff-6a0d775777d6ff7039a5dd24__footer" data-ff-el="footer">
           <button type="submit" class="ff-6a0d775777d6ff7039a5dd24__button fd-btn" data-ff-el="submit" data-ff-tab="submit">
-            <div><span data-draw-element="editable">Subscribe</span></div>
+            <div><span data-draw-element="editable">Book Your FREE Consultation Call</span></div>
           </button>
         </div>
 

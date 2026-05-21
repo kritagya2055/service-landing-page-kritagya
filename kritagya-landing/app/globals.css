@@ -221,6 +221,17 @@ select option {
   font-size: 14px !important;
 }
 
+/* Textarea — same dark/silver field style, fixed 120px height */
+.flodesk-wrap
+  [data-ff-el="root"].ff-6a0d775777d6ff7039a5dd24
+  textarea.ff-6a0d775777d6ff7039a5dd24__control {
+  height: 120px !important;
+  min-height: 120px !important;
+  padding: 14px 18px !important;
+  line-height: 1.5 !important;
+  resize: vertical !important;
+}
+
 /* Submit button — silver gradient, black text, matches site CTA */
 .flodesk-wrap
   [data-ff-el="root"].ff-6a0d775777d6ff7039a5dd24
@@ -228,12 +239,15 @@ select option {
   width: 100% !important;
   border: none !important;
   border-radius: 9999px !important;
-  padding: 14px 28px !important;
+  padding: 20px 32px !important;
+  min-height: 60px !important;
   color: #000000 !important;
   font-weight: 700 !important;
-  font-size: 15px !important;
+  font-size: 16px !important;
   font-family: inherit !important;
-  letter-spacing: 0.2px !important;
+  letter-spacing: 0.3px !important;
+  white-space: normal !important;
+  line-height: 1.2 !important;
   background: linear-gradient(
     135deg,
     #f4f4f4 0%,
