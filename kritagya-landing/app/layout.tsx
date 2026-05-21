@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import PageLoadFade from "./components/PageLoadFade";
 import FloatingParticles from "./components/FloatingParticles";
+import MetaPixel from "./components/MetaPixel";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -23,6 +24,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col bg-background text-foreground relative overflow-x-hidden">
+        <MetaPixel />
         <FloatingParticles />
         <PageLoadFade>{children}</PageLoadFade>
       </body>
